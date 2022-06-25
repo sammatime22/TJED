@@ -14,10 +14,12 @@ class Vocab(models.Model):
     japanese_definition = models.CharField(max_length=100)
     example_sentence = models.ForeignKey(ExampleSentence, on_delete=models.DO_NOTHING)
 
+
 class ExampleSentence(models.Model):
     example_sentence = models.CharField(max_length=200)
     english_translation_attempt = models.CharField(max_length=500)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
+
 
 class Article(models.Model):
     link = models.CharField(max_length=250)
