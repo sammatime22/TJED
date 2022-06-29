@@ -4,7 +4,7 @@ from . import views
 
 app_name = 'api'
 urlpatterns = [
-    path('kanji/<str:pk>/', views.KanjiView.as_view()),
-    path('vocab/japanese/<str:vocab>/<bool:include_example>/', views.JapaneseToEnglishVocabView.as_view()),
-    path('vocab/english/<str:vocab>/<bool:include_example>/', views.EnglishToJapaneseVocabView.as_view()),
+    path('kanji/<str:kanji_character>', views.get_kanji, name="kanji"),
+    # path('vocab/japanese/<str:vocab>/', views.JapaneseToEnglishVocabView.as_view()),
+    # path('vocab/english/<str:vocab>/', views.EnglishToJapaneseVocabView.as_view()),
 ]
