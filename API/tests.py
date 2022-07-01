@@ -3,6 +3,8 @@ from django.urls import reverse
 
 from .models import Kanji, Vocab
 
+import json
+
 # Factory methods to facilitate testing
 def create_kanji(kanji_character, meaning, on_yomi, kun_yomi):
     Kanji.objects.create(kanji_character=kanji_character, meaning=meaning, on_yomi=on_yomi, kun_yomi=kun_yomi)
@@ -17,8 +19,13 @@ class KanjiViewTests(TestCase):
     def test_kanji_search_returns_200(self):
         kanji_under_test = create_kanji(kanji_character='日', meaning="day, Sun", on_yomi="ニチ、ジツ", kun_yomi="ひ、ーぴ、ーか")
         response = self.client.get(reverse('api:kanji', args=('日',)))
-        # TODO Determine what the format of our response will look like
-        print(response.content)
+        
+        kanji_response_as_json = json.loads(response.content.decode('utf-8'))
+        assert kanji_response_as_json.get("kanji") == '日'
+        assert kanji_response_as_json.get("meaning") == "day, Sun"
+        assert kanji_response_as_json.get("on_yomi") == "ニチ、ジツ"
+        assert kanji_response_as_json.get("kun_yomi") == "ひ、ーぴ、ーか"
+        
 
     # Test 404 response and no content returned with no Kanji
 
