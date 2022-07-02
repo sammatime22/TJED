@@ -30,11 +30,11 @@ def get_kanji(request, kanji_character):
 def get_vocab_using_japanese(request, japanese_word_query):
     try:
         vocab = Vocab.objects.filter(japanese_word__exact=japanese_word_query)
-        if vocab is not None:
+        if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
             return HttpResponse(vocab)
         else:
             vocab = Vocab.objects.filter(furigana__exact=japanese_word_query)
-            if vocab is not None:
+            if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 return HttpResponse(vocab)
             else:
                 return HttpResponseNotFound(EMPTY_RESPONSE)

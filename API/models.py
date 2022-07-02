@@ -17,7 +17,7 @@ class Kanji(models.Model):
 
 
 class Vocab(models.Model):
-    japanese_word = models.CharField(max_length=100)
+    japanese_word = models.CharField(max_length=100, primary_key=True)
     furigana = models.CharField(max_length=100)
     english_word = models.CharField(max_length=100)
 

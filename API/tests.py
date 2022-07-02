@@ -54,14 +54,45 @@ class KanjiViewTests(TestCase):
         assert response.content == b'{}'
             
 
-#class VocabFromJapaneseViewTests(TestCase):
+class VocabFromJapaneseViewTests(TestCase):
     # Test 200 response given a word
+    def test_vocab_search_using_japanese_returns_200(self):
+        create_vocab(japanese_word="日", furigana="にち", english_word="Sun")
+        response = self.client.get(reverse('api:vocab_from_japanese', args=("日",)))
+
+        vocab_response_as_json = json.loads(response.content.decode('utf-8'))
+        assert response.status_code == 200
+        assert vocab_response_as_json.get("japanese_word") == "日"
+        assert vocab_response_as_json.get("furigana") == "にち"
+        assert vocab_response_as_json.get("english_word") == "Sun"
+
 
     # Test 200 response given the furigana of the word
+    def test_vocab_search_using_japanese_phonetic_returns_200(self):
+        create_vocab(japanese_word="日", furigana="にち", english_word="Sun")
+        response = self.client.get(reverse('api:vocab_from_japanese', args=("にち",)))
+
+        vocab_response_as_json = json.loads(response.content.decode('utf-8'))
+        assert response.status_code == 200
+        assert vocab_response_as_json.get("japanese_word") == "日"
+        assert vocab_response_as_json.get("furigana") == "にち"
+        assert vocab_response_as_json.get("english_word") == "Sun"
 
     # Test 404 response and no content returned
+    def test_vocab_search_using_japanese_returns_404(self):
+        response = self.client.get(reverse('api:vocab_from_japanese', args=('にち',)))
+        assert response.status_code == 404
+        assert response.content == b'{}'
+
 
     # Test 500 response returned if server error
+    @patch('API.models.Vocab.objects.filter')
+    def test_vocab_search_using_japanese_returns_500(self, mock_corrupt_filter):
+        mock_corrupt_filter.side_effect = Exception
+        mock_request_argument = None
+        response = get_vocab_using_japanese(mock_request_argument, '日')
+        assert response.status_code == 500
+        assert response.content == b'{}'
 
 
 class VocabFromEnglishViewTests(TestCase):
