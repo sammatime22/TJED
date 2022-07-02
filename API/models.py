@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.contenttypes.fields import GenericRelation
 
-# Create your models here.
+
 class Kanji(models.Model):
     kanji_character = models.CharField(max_length=1, primary_key=True)
     meaning = models.CharField(max_length=100)
@@ -18,6 +17,19 @@ class Kanji(models.Model):
 
 
 class Vocab(models.Model):
-    kanji = GenericRelation(Kanji)
-    english_definition = models.CharField(max_length=100)
-    japanese_definition = models.CharField(max_length=100)
+    japanese_word = models.CharField(max_length=100)
+    furigana = models.CharField(max_length=100)
+    english_word = models.CharField(max_length=100)
+
+    def __str__(self):
+        if self.furigana is not None:
+            return str({
+                "japanese_word": self.japanese_word,
+                "furigana": self.furigana,
+                "english_word": self.english_word
+            }).replace("'", "\"")
+        else:         
+            return str({
+                "japanese_word": self.japanese_word,
+                "english_word": self.english_word
+            }).replace("'", "\"")
