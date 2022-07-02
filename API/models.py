@@ -9,17 +9,12 @@ class Kanji(models.Model):
     kun_yomi = models.CharField(max_length=100)
 
     def __str__(self):
-        kanji_to_return = self.kanji_character
-        meaning_to_return = self.meaning
-        on_yomi_to_return = self.on_yomi
-        kun_yomi_to_return = self.kun_yomi
-        kanji_as_json = {
-            "kanji": kanji_to_return,
-            "meaning": meaning_to_return,
-            "on_yomi": on_yomi_to_return,
-            "kun_yomi": kun_yomi_to_return
-        }
-        return str(kanji_as_json).replace("'", "\"")
+        return str({
+            "kanji": self.kanji_character,
+            "meaning": self.meaning,
+            "on_yomi": self.on_yomi,
+            "kun_yomi": self.kun_yomi
+        }).replace("'", "\"")
 
 
 class Vocab(models.Model):
