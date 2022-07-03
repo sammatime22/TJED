@@ -11,7 +11,7 @@ ENGLISH_WORD_INDEX_TJED = 2
 # Read lines
 edict_source_file = open("edict.sql", "r")
 edict_source_file_lines = edict_source_file.readlines()
-tjed_destination_file = open("tjed.sql", "w")
+tjed_destination_file = open("tjed_vocab.sql", "w")
 tjed_destination_file_lines = []
 
 # for each line
