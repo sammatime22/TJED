@@ -2,3 +2,5 @@ db.sqlite3
 API/migrations
 TJED/__pycache__
 API/__pycache__
+Infrastructure/edict.sql
+Infrastructure/kanjidic2.xml
