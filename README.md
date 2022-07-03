@@ -4,11 +4,11 @@ A Tiny Japanese English Dictionary (TJED) API and Webapp utilizing Django.
 
 
 API Documentation
- URL Extension                        | Method | Expected Results                                      
+URL Extension                        | Method | Expected Results                                      
 
- /api/kanji/{kanji_character}/        | GET    | Metadata associated with the Kanji character          
- /api/vocab/japanese/{japanese_word}/ | GET    | Data of the Japanese word and it's English equivalent 
- /api/vocab/english/{english_word}/   | GET    | Data of the Japanese word from the English equivalent 
+/api/kanji/{kanji_character}/        | GET    | Metadata associated with the Kanji character          
+/api/vocab/japanese/{japanese_word}/ | GET    | Data of the Japanese word and it's English equivalent 
+/api/vocab/english/{english_word}/   | GET    | Data of the Japanese word from the English equivalent 
 ---------------------------------------------------------------------------------------------------------
 
 Basic Usage
