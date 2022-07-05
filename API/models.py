@@ -32,26 +32,26 @@ class Kanji(models.Model):
 class Vocab(models.Model):
     '''
     A model representing both the Japanese and English word, along with assistance in reading the
-    Japanese word if needed (furigana).
+    Japanese word if needed (kana).
 
     Parameters:
     ----------
     japanese_word : The Japanese word associated with the vocab
-    furigana (optional) : An assistance to reading the Japanese word
+    kana (optional) : An assistance to reading the Japanese word
     english_word : The English word associated with the vocab
     '''
-    japanese_word = models.CharField(max_length=100, primary_key=True)
-    furigana = models.CharField(max_length=100)
-    english_word = models.CharField(max_length=100)
+    japanese_word = models.CharField(max_length=20)
+    kana = models.CharField(max_length=20)
+    english_word = models.CharField(max_length=200)
 
     def __str__(self):
         '''
         Returns a JSON string of the Vocab model.
         '''
-        if self.furigana is not None:
+        if self.kana is not None:
             return str({
                 "japanese_word": self.japanese_word,
-                "furigana": self.furigana,
+                "kana": self.kana,
                 "english_word": self.english_word
             }).replace("'", "\"")
         else:         

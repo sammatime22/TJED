@@ -2,5 +2,6 @@ db.sqlite3
 API/migrations
 TJED/__pycache__
 API/__pycache__
-Infrastructure/edict.sql
+Infrastructure/edict*
 Infrastructure/kanjidic2.xml
+Infrastructure/banned_words.txt

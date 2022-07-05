@@ -58,7 +58,7 @@ def get_vocab_using_japanese(request, japanese_word_query):
         if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
             return HttpResponse(vocab)
         else:
-            vocab = Vocab.objects.filter(furigana__exact=japanese_word_query)
+            vocab = Vocab.objects.filter(kana__exact=japanese_word_query)
             if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 return HttpResponse(vocab)
             else:

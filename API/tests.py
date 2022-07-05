@@ -12,8 +12,8 @@ from unittest.mock import patch
 def create_kanji(kanji_character, meaning, on_yomi, kun_yomi):
     Kanji.objects.create(kanji_character=kanji_character, meaning=meaning, on_yomi=on_yomi, kun_yomi=kun_yomi)
 
-def create_vocab(japanese_word, furigana, english_word):
-    Vocab.objects.create(japanese_word=japanese_word, furigana=furigana, english_word=english_word)
+def create_vocab(japanese_word, kana, english_word):
+    Vocab.objects.create(japanese_word=japanese_word, kana=kana, english_word=english_word)
 
 
 # Create your tests here.
@@ -57,25 +57,25 @@ class KanjiViewTests(TestCase):
 class VocabFromJapaneseViewTests(TestCase):
     # Test 200 response given a word
     def test_vocab_search_using_japanese_returns_200(self):
-        create_vocab(japanese_word="日", furigana="にち", english_word="Sun")
+        create_vocab(japanese_word="日", kana="にち", english_word="Sun")
         response = self.client.get(reverse('api:vocab_from_japanese', args=("日",)))
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
         assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("furigana") == "にち"
+        assert vocab_response_as_json.get("kana") == "にち"
         assert vocab_response_as_json.get("english_word") == "Sun"
 
 
-    # Test 200 response given the furigana of the word
+    # Test 200 response given the kana of the word
     def test_vocab_search_using_japanese_phonetic_returns_200(self):
-        create_vocab(japanese_word="日", furigana="にち", english_word="Sun")
+        create_vocab(japanese_word="日", kana="にち", english_word="Sun")
         response = self.client.get(reverse('api:vocab_from_japanese', args=("にち",)))
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
         assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("furigana") == "にち"
+        assert vocab_response_as_json.get("kana") == "にち"
         assert vocab_response_as_json.get("english_word") == "Sun"
 
     # Test 404 response and no content returned
@@ -98,13 +98,13 @@ class VocabFromJapaneseViewTests(TestCase):
 class VocabFromEnglishViewTests(TestCase):
     # Test 200 response given a word
     def test_vocab_search_using_english_returns_200(self):
-        create_vocab(japanese_word="日", furigana="にち", english_word="Sun")
+        create_vocab(japanese_word="日", kana="にち", english_word="Sun")
         response = self.client.get(reverse('api:vocab_from_english', args=("Sun",)))
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
         assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("furigana") == "にち"
+        assert vocab_response_as_json.get("kana") == "にち"
         assert vocab_response_as_json.get("english_word") == "Sun"
 
 
