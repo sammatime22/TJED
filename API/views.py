@@ -7,6 +7,7 @@ from django.views import generic
 # Constants associated with the Views of the API
 EXPECTED_KANJI_QUERY_LENGTH = 1
 EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY = 1
+MAX_RESULTS_TO_RETUFN = 20
 EMPTY_RESPONSE = "{}"
 
 
@@ -54,13 +55,15 @@ def get_vocab_using_japanese(request, japanese_word_query):
     A HTTP response, alongside Vocab data, if applicable.
     '''
     try:
-        vocab = Vocab.objects.filter(japanese_word__exact=japanese_word_query)
-        if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
-            return HttpResponse(vocab)
+        vocab = Vocab.objects.filter(japanese_word__contains=japanese_word_query)
+        if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
+            number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
+            return HttpResponse(vocab[0:number_of_results_to_return])
         else:
-            vocab = Vocab.objects.filter(kana__exact=japanese_word_query)
-            if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
-                return HttpResponse(vocab)
+            vocab = Vocab.objects.filter(kana__contains=japanese_word_query)
+            if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
+                number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
+                return HttpResponse(vocab[0:number_of_results_to_return])
             else:
                 return HttpResponseNotFound(EMPTY_RESPONSE)
     except:
@@ -82,9 +85,10 @@ def get_vocab_using_english(request, english_word_query):
     A HTTP response, alongside Vocab data, if applicable.
     '''
     try:
-        vocab = Vocab.objects.filter(english_word__exact=english_word_query)
-        if len(vocab) == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
-            return HttpResponse(vocab)
+        vocab = Vocab.objects.filter(english_word__startswith=english_word_query)
+        if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
+            number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
+            return HttpResponse(vocab[0:number_of_results_to_return])
         else:
             return HttpResponseNotFound(EMPTY_RESPONSE)
     except:
