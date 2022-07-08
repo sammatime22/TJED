@@ -34,7 +34,8 @@ def gather_info_from_character_tag(character_tag_data):
     on_yomi = gather_attribute_string_from_items_list(character_tag_data.find_all(READING, r_type=CLASS_ON_YOMI))
     kun_yomi = gather_attribute_string_from_items_list(character_tag_data.find_all(READING, r_type=CLASS_KUN_YOMI))
     meaning = gather_attribute_string_from_items_list(character_tag_data.find_all(MEANING, m_lang=CLASS_ENG))
-    return [kanji_character, on_yomi, kun_yomi, meaning]
+    if meaning != "" and (on_yomi != "" or kun_yomi != ""):
+        return [kanji_character, on_yomi, kun_yomi, meaning]
 
 
 # Read in file and set up things
@@ -50,10 +51,12 @@ character_tags = soupy.find_all(CHARACTER)
 # for each character tag
 for character_tag in character_tags:
     # gather the info and place it into the expected indicies
-    kanji_data_list.append(gather_info_from_character_tag(character_tag))
+    character_tag_info = gather_info_from_character_tag(character_tag)
+    if character_tag_info is not None:
+        kanji_data_list.append(character_tag_info)
 
 # Write data out to file
-output_file.write("INSERT INTO API_kanji (kanji_character, meaning, on_yomi, kun_yomi) VALUES ")
+output_file.write("INSERT INTO API_kanji (kanji_character, on_yomi, kun_yomi, meaning) VALUES ")
 number_of_kanji_entries = len(kanji_data_list)
 number_of_kanji_entries_written = 0
 for kanji_data in kanji_data_list:

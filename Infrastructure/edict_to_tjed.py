@@ -23,7 +23,7 @@ def cut_line_parts(line):
     english_word_parts = line_parts[ENGLISH_WORD_INDEX_EDICT]\
                             .replace("'", "").replace("/(P)", "")\
                             .replace("(n)", "").replace("/", ", ")\
-                            .replace("\s", "'s").split(" ")
+                            .replace("\s", "'s").replace("\\\"", "").split(" ")
 
     english_word = ""
     for i in range(1, len(english_word_parts)):
