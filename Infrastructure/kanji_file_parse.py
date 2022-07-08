@@ -18,6 +18,18 @@ KUN_YOMI_INDEX_TJED = 3
 
 # Helper methods
 def gather_attribute_string_from_items_list(items):
+    '''
+    Gathers an array of attribute tags from the source .xml file, and
+    returns them as a string for TJED.
+
+    Parameters:
+    ----------
+    items : An array of items, all from the same tag type
+
+    Returns:
+    ----------
+    A string of the attribute text values strung together
+    '''
     item_list_string = ""
     item_list_length = len(items)
     items_viewed = 0
@@ -30,6 +42,17 @@ def gather_attribute_string_from_items_list(items):
 
 
 def gather_info_from_character_tag(character_tag_data):
+    '''
+    Gathers all info from the different tags of interest within the overarching tag.
+
+    Parameters:
+    ----------
+    character_tag_data : The tag "xml" data for the character
+
+    Returns:
+    ----------
+    An array of the different strings of data related to the TJED Kanji table.
+    '''
     kanji_character = character_tag_data.find(LITERAL).getText()
     on_yomi = gather_attribute_string_from_items_list(character_tag_data.find_all(READING, r_type=CLASS_ON_YOMI))
     kun_yomi = gather_attribute_string_from_items_list(character_tag_data.find_all(READING, r_type=CLASS_KUN_YOMI))

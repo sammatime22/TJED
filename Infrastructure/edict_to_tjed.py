@@ -17,6 +17,18 @@ ENGLISH_WORD_INDEX_EDICT = 3
 
 # Helper Functions
 def cut_line_parts(line):
+    '''
+    Takes in a line from the source .sql file, properly cleans it, and returns it
+    as a TJED compatible array.
+
+    Parameters:
+    ----------
+    line : The line in question
+
+    Returns:
+    ----------
+    An array of the three parts needed for the TJED Vocab DB table.
+    '''
     line_parts = line[1:-3].split(",'")
     japanese_word = line_parts[JAPANESE_WORD_INDEX_EDICT].replace("'", "")
     japanese_kana = line_parts[JAPANESE_KANA_INDEX_EDICT].replace("'", "")
