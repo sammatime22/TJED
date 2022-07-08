@@ -49,7 +49,8 @@ for line in edict_source_file_lines:
         for word in banned_words:
             if line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1] + ",")\
                 or line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1] + " ")\
-                or line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1]):
+                or line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1])\
+                or line_parts[ENGLISH_WORD_INDEX_TJED] == word[:-1]:
                 contained_banned_word = True
                 break
 

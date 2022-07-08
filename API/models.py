@@ -12,7 +12,7 @@ class Kanji(models.Model):
     on_yomi : The Sino-Japanese reading
     kun_yomi : The native Japanese reading
     '''
-    kanji_character = models.CharField(max_length=1, primary_key=True)
+    kanji_character = models.CharField(max_length=1)
     meaning = models.CharField(max_length=100)
     on_yomi = models.CharField(max_length=100)
     kun_yomi = models.CharField(max_length=100)
