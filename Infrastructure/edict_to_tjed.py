@@ -22,7 +22,8 @@ def cut_line_parts(line):
     japanese_kana = line_parts[JAPANESE_KANA_INDEX_EDICT].replace("'", "")
     english_word_parts = line_parts[ENGLISH_WORD_INDEX_EDICT]\
                             .replace("'", "").replace("/(P)", "")\
-                            .replace("(n)", "").replace("/", ", ").split(" ")
+                            .replace("(n)", "").replace("/", ", ")\
+                            .replace("\s", "'s").split(" ")
 
     english_word = ""
     for i in range(1, len(english_word_parts)):
@@ -50,7 +51,8 @@ for line in edict_source_file_lines:
             if line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1] + ",")\
                 or line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1] + " ")\
                 or line_parts[ENGLISH_WORD_INDEX_TJED].__contains__(" " + word[:-1])\
-                or line_parts[ENGLISH_WORD_INDEX_TJED] == word[:-1]:
+                or line_parts[ENGLISH_WORD_INDEX_TJED].split(",")[0] == word[:-1]\
+                or line_parts[ENGLISH_WORD_INDEX_TJED].split(" ")[0] == word[:-1]:
                 contained_banned_word = True
                 break
 
@@ -62,7 +64,7 @@ tjed_destination_file.write('INSERT INTO API_vocab (japanese_word, kana, english
 lines_to_write = len(tjed_destination_file_lines) - 1
 lines_written = 0
 for line_parts in tjed_destination_file_lines:
-    tjed_destination_file.write("('{}', '{}', '{}')"\
+    tjed_destination_file.write("(\"{}\", \"{}\", \"{}\")"\
         .format(line_parts[JAPANESE_WORD_INDEX_TJED],\
                 line_parts[JAPANESE_KANA_INDEX_TJED],\
                 line_parts[ENGLISH_WORD_INDEX_TJED]))
