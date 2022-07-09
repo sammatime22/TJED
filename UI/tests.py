@@ -29,20 +29,28 @@ class KanjiResultsPageViewTests(TestCase):
         assert decoded_content.find("<li>On-Yomi: ニチ、ジツ</li>") > -1
         assert decoded_content.find("<li>Kun-Yomi: ひ、ーぴ、ーか </li>") > -1
         assert decoded_content.find("<li>Meaning: day, Sun </li>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
 
 
     # The status code is 404 and no Kanji info is returned, described in the message
     def test_kanji_search_comes_back_without_results(self):
         response = self.client.get(reverse('ui:kanji', args=('日',)))
         assert response.status_code == 404
-        assert response.content.decode('utf-8').find("<h5>No Kanji could be found via this search.</h5>") > -1
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<h5>No Kanji could be found via this search.</h5>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
 
 
     # The status code is 400, and no Kanji info is returned, described in the message
     def test_kanji_search_is_a_bad_request(self):
         response = self.client.get(reverse('ui:kanji', args=('日曜日',)))
         assert response.status_code == 400
-        assert response.content.decode('utf-8').find("<h5>The query parameters provided were not of an appropriate length.</h5>")
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<h5>The query parameters provided were not of an appropriate length.</h5>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
 
 
     # The status code is 500, and explicitly states an Internal Server Error occurred
@@ -51,7 +59,8 @@ class KanjiResultsPageViewTests(TestCase):
         mock_corrupt_filter.side_effect = Exception
         response = self.client.get(reverse('ui:kanji', args=('日',)))
         assert response.status_code == 500
-        assert response.content.decode('utf-8').find("<p>Internal Server Error</p>") > -1
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<p>Internal Server Error</p>") > -1
 
 
 # class VocabResultsPageViewTests(TestCase):

@@ -33,11 +33,11 @@ class KanjiResultsPageView(generic.ListView):
 
         Returns:
         ----------
-            An HTTP response plus HTML, containing one of:
-                200 -> Along with Kanji data
-                400 -> Along with a response explaining why a bad request was made
-                404 -> Along with a response explaining no Kanji exist for the query
-                500 -> Along with a response explaining that there was an ISE
+        An HTTP response plus HTML, containing one of:
+            200 -> Along with Kanji data
+            400 -> Along with a response explaining why a bad request was made
+            404 -> Along with a response explaining no Kanji exist for the query
+            500 -> Along with a response explaining that there was an ISE
         '''
         try:
             # Update the Daily Search Metadata
@@ -79,29 +79,70 @@ class VocabResultsPageView(generic.ListView):
     template_name = 'ui/vocab_results.html'
     model = Vocab
 
-    def get(request, use_english_search, vocab):
+    def get(self, request, use_english_search, vocab):
+        '''
+        The interfacing method for the UI to gather and return Vocab data, based on whether
+        the user intends to use English or Japanese.
+
+        Parameters:
+        ----------
+        self : The object itself
+        request : The request made from the user
+        use_english_search : A boolean defining whether the request should be made
+                            for English or Japanese words
+        vocab : The vocabulary in question
+
+        Returns:
+        ----------
+        An HTTP response plus HTML, containing one of:
+            200 -> Along with Vocab data
+            404 -> Along with a response explaining no Vocab exist for the query
+            500 -> Along with a response explaining that there was an ISE
+        '''
         if use_english_search:
             return vocab_from_english(vocab)
         else:
             return vocab_from_japanese(vocab)
 
     def vocab_from_english(vocab):
+        '''
+        Ues the provided English Vocab, and returns a response in HTML.
+
+        Parameters:
+        ----------
+        vocab : The vocab in question
+
+        Returns:
+        ----------
+        An HTTP/HTML response
+        '''
         try:
             vocab_list = Vocab.objects.filter(english_word__startswith=vocab)
             if len(vocab_list) < 1:
                 return render(request, 'ui/vocab_results.html', {
                     'error_message': "No Vocab could be found via the English term provided."
-                }, status=404) # 404
+                }, status=404)
             else:
                 return render(request, 'ui/vocab_results.html', {
                     "vocab_list": vocab_list
-                }, status=200) # 200
+                }, status=200)
         except:
             return render(request, 'ui/server_error.html', {
                 'error_message': "An issue occurred within the server"
-            }, status=500) # 500
+            }, status=500)
 
     def vocab_from_japanese(vocab):
+        '''
+        Uses the provided Japanese Vocab, and returns a response in HTML.
+
+        Parameters:
+        ----------
+        vocab : The vocab in question
+
+        Returns:
+        ----------
+        An HTTP/HTML response
+        '''
         try:
             vocab_list = Vocab.objects.filter(japanese_word__contains=vocab)
             if len(vocab_list) < 1:
@@ -113,12 +154,12 @@ class VocabResultsPageView(generic.ListView):
                 else:
                     return render(request, 'ui/vocab_results.html', {
                         "vocab_list": vocab_list
-                    }, status=200) # 200
+                    }, status=200)
             else:
                 return render(request, 'ui/vocab_results.html', {
                     "vocab_list": vocab_list
-                }, status=200) # 200
+                }, status=200)
         except:
             return render(request, 'ui/server_error.html', {
                 'error_message': "An issue occurred within the server"
-            }, status=500) # 500
+            }, status=500)
