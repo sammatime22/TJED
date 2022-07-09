@@ -1,0 +1,14 @@
+<h2>TJED</h2>
+
+<ul>
+    {% for vocab_item in vocab %}
+        {% if vocab_item.japanese_word != "" %}
+            <li>Japanese Word: {{ vocab_item.japanese_word }}</li>
+            <li>Kana (reading): {{ vocab_item.kana }} </li>
+            <li>English Word: {{ vocab_item.english_word }}</li>
+        {% else %}
+            <li>Kana (reading): {{ vocab_item.kana }} </li>
+            <li>English Word: {{ vocab_item.english_word }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>

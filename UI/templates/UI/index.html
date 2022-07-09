@@ -1,0 +1,5 @@
+{% load static %}
+
+<h2>TJED</h2>
+
+<input><button onclick="{% if (kanji) url ui:results kanji elif (japanese) url ui:vocab_jpn vocab else url ui:vocab_eng vocab %}">Search/検索</button>
