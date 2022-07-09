@@ -10,7 +10,7 @@ class DailySearchMetadata(models.Model):
     date : The day in question, relative to UTC
     number_of_searches : The number of searches in that day
     '''
-    date = models.DateModel()
+    date = models.DateTimeField()
     number_of_searches = models.PositiveIntegerField()
 
     def increment_searches(self):
