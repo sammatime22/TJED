@@ -1,10 +1,13 @@
 <h2>TJED</h2>
-
-<ul>
-    {% for kanji_item in kanji %}
-        <li>{{ kanji_item.kanji_character }}</li>
-        <li>On-Yomi: {{ kanji_item.on_yomi }}</li>
-        <li>Kun-Yomi: {{ kanji_item.kun_yomi }} </li>
-        <li>Meaning: {{ kanji_item.meaning }} </li>
-    {% endfor %}
-</ul>
+{% if error_message is not None %}
+   <h5>{{ error_message }}</h5> 
+{% else %}
+    <ul>
+        {% for kanji_item in kanji_list %}
+            <li>Kanji: {{ kanji_item.kanji_character }}</li>
+            <li>On-Yomi: {{ kanji_item.on_yomi }}</li>
+            <li>Kun-Yomi: {{ kanji_item.kun_yomi }} </li>
+            <li>Meaning: {{ kanji_item.meaning }} </li>
+        {% endfor %}
+    </ul>
+{% endif %}
