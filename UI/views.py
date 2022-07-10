@@ -13,6 +13,8 @@ class SearchPageView(generic.DetailView):
     '''
     template_name = 'ui/index.html'
 
+    def get(self, request):
+        return render(request, 'ui/index.html', {})
 
 class KanjiResultsPageView(generic.ListView):
     '''

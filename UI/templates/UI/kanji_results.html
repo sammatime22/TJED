@@ -1,4 +1,7 @@
-<h2>TJED</h2>
+{% load static %}
+
+{% include "UI/search.html" %}
+
 {% if error_message is not None %}
    <h5>{{ error_message }}</h5> 
 {% else %}

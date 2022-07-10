@@ -1,0 +1,33 @@
+<script>
+    function searchTypeChanged() {
+        if (document.getElementById("searchtype_kanji").checked) {
+            document.getElementById("language_jpn").disabled = true;
+            document.getElementById("language_eng").disabled = true;
+        } else {
+            document.getElementById("language_jpn").disabled = false;            
+            document.getElementById("language_eng").disabled = false;
+        }
+    }
+
+    function goto() {
+        console.log(document.getElementById("searchbar").value);
+        if (document.getElementById("searchtype_kanji").checked) {
+            window.location.replace({% url 'UI.kanji' %} + document.getElementById("searchbar").value);
+        } else {
+            if (document.getElementById("language_jpn").checked) {
+                window.location.replace({% url 'vocab_from_japanese' %} + document.getElementById("searchbar").value);
+            } else {
+                window.location.replace({% url 'vocab_from_english' %} +  document.getElementById("searchbar").value);
+            }
+        }
+    }
+</script>
+
+<h2>TJED</h2>
+
+<input id="searchbar" type="text" placeholder="search / 検索">
+<button type="submit" onclick="goto()">
+    <i class="fa fa-search">&#128269;</i>
+</button>
+<input type="radio" onchange="searchTypeChanged()" name="searchtype" value="kanji" id="searchtype_kanji"><label>Kanji</label><input type="radio" onchange="searchTypeChanged()" name="searchtype" value="vocab" checked><label>Vocab</label>
+<input type="radio" name="language" value="japanese" id="language_jpn" checked><label>Japanese</label><input type="radio" name="language" id="language_eng" value="english"><label>English</label>
