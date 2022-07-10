@@ -63,26 +63,94 @@ class KanjiResultsPageViewTests(TestCase):
         assert decoded_content.find("<p>Internal Server Error</p>") > -1
 
 
-# class VocabResultsPageViewTests(TestCase):
-#     '''
-#     Tests used to test the resolving of Vocab data on the Results page.
-#     '''
-#     def test_english_vocab_search_comes_back_with_vocab_results(self):
-#         vocab_of_interest = create_vocab(japanese_word="日", kana="にち", english_word="Sun")
-#         url = reverse('ui:eng', args=(vocab_of_interest.english_word,))
-#         response = self.client.get(url)
-#         self.assertEqual(response.status_code, 200)
-#         # also assert that the expected "vocab" data was returned
+class VocabResultsPageViewTests(TestCase):
+    '''
+    Tests used to test the resolving of Vocab data on the Results page.
+    '''
+    # 200 w/kanji search
+    def test_japanese_vocab_search_comes_back_with_vocab_results(self):
+        vocab_of_interest = create_vocab(japanese_word="日", kana="にち", english_word="Sun")
+        response = self.client.get(reverse('ui:vocab_from_japanese', args=("日",)))
+        assert response.status_code == 200
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
+        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
+        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
 
-#     def test_japanese_vocab_search_comes_back_with_vocab_results(self):
-#         vocab_of_interest = create_vocab(japanese_word="日", kana="にち", english_word="Sun")
-#         url = reverse('ui:jpn', args=(vocab_of_interest.japanese_word,))
-#         response = self.client.get(url)
-#         self.assertEqual(response.status_code, 200)
-#         # again, assert that the expected "vocab" data was returned
 
-#     def test_search_comes_back_without_results(self):
-#         url = reverse('ui:eng', args=("wazaaap",))
-#         response = self.client.get(url)
-#         self.assertEqual(response.status_code, 404)
-#         # Ensure the empty page still has attributes we would expect
+    # Kana search 200
+    def test_japanese_vocab_search_using_kana_comes_back_with_vocab_results(self):
+        vocab_of_interest = create_vocab(japanese_word="日", kana="にち", english_word="Sun")
+        response = self.client.get(reverse('ui:vocab_from_japanese', args=("にち",)))
+        assert response.status_code == 200
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
+        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
+        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+
+
+    # Test that a we try the Japanese search but do not get anything back and status code 404
+    def test_japanese_vocab_search_comes_back_without_vocab_results(self):
+        response = self.client.get(reverse('ui:vocab_from_japanese', args=("日",)))
+        assert response.status_code == 404
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<h5>No Vocab could be found via the Japanese term provided.</h5>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+
+
+    # Test Japanese Vocab 500
+    @patch('API.models.Vocab.objects.filter')
+    def test_japanese_vocab_search_has_internal_server_error(self, mock_corrupt_filter):
+        mock_corrupt_filter.side_effect = Exception
+        response = self.client.get(reverse('ui:vocab_from_japanese', args=("日",)))
+        assert response.status_code == 500
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<p>Internal Server Error</p>") > -1
+
+
+    # Test that a proper English search returns vocab results and status code 200
+    def test_english_vocab_search_comes_back_with_vocab_results(self):
+        create_vocab(japanese_word="日", kana="にち", english_word="Sun")
+        response = self.client.get(reverse('ui:vocab_from_english', args=("Sun",)))
+        assert response.status_code == 200
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
+        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
+        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+    
+
+    # Test that a we try the English search but do not get anything back and status code 404
+    def test_english_vocab_search_comes_back_without_vocab_results(self):
+        response = self.client.get(reverse('ui:vocab_from_english', args=("Sun",)))
+        assert response.status_code == 404
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<h5>No Vocab could be found via the English term provided.</h5>") > -1
+        assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
+        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+
+
+    # Test English Vocab 500
+    @patch('API.models.Vocab.objects.filter')
+    def test_english_vocab_search_has_internal_server_error(self, mock_corrupt_filter):
+        mock_corrupt_filter.side_effect = Exception
+        response = self.client.get(reverse('ui:vocab_from_english', args=("Sun",)))
+        assert response.status_code == 500
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<p>Internal Server Error</p>") > -1
+
+
+    # Test Overarching View 500
+    @patch('UI.models.DailySearchMetadata.objects.filter')
+    def test_vocab_search_has_internal_server_error(self, mock_corrupt_filter):
+        mock_corrupt_filter.side_effect = Exception
+        response = self.client.get(reverse('ui:vocab_from_english', args=("Sun",)))
+        assert response.status_code == 500
+        decoded_content = response.content.decode('utf-8')
+        assert decoded_content.find("<p>Internal Server Error</p>") > -1

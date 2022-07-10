@@ -79,7 +79,13 @@ class VocabResultsPageView(generic.ListView):
     template_name = 'ui/vocab_results.html'
     model = Vocab
 
-    def get(self, request, use_english_search, vocab):
+    LANGUAGE_LOOKUP_SECTION = 3 # First entry in split list is ''
+
+    JAPANESE = "japanese"
+
+    ENGLISH = "english"
+
+    def get(self, request, vocab):
         '''
         The interfacing method for the UI to gather and return Vocab data, based on whether
         the user intends to use English or Japanese.
@@ -88,8 +94,6 @@ class VocabResultsPageView(generic.ListView):
         ----------
         self : The object itself
         request : The request made from the user
-        use_english_search : A boolean defining whether the request should be made
-                            for English or Japanese words
         vocab : The vocabulary in question
 
         Returns:
@@ -99,12 +103,62 @@ class VocabResultsPageView(generic.ListView):
             404 -> Along with a response explaining no Vocab exist for the query
             500 -> Along with a response explaining that there was an ISE
         '''
-        if use_english_search:
-            return vocab_from_english(vocab)
-        else:
-            return vocab_from_japanese(vocab)
+        try:
+            # Update the Daily Search Metadata
+            daily_search_metadata = DailySearchMetadata.objects.filter(date__exact=timezone.now()).first()
+            if daily_search_metadata is None:
+                daily_search_metadata = DailySearchMetadata.objects.create(date=timezone.now(), number_of_searches=0)
+            daily_search_metadata.increment_searches()
+            daily_search_metadata.save()
+            language_to_use = request.path_info.split("/")[self.LANGUAGE_LOOKUP_SECTION]
+            if language_to_use == self.JAPANESE:
+                return self.vocab_from_japanese(request, vocab, daily_search_metadata)
+            else: # default to English search (for now)
+                return self.vocab_from_english(request, vocab, daily_search_metadata)
+        except:
+            return render(request, 'ui/server_error.html', {
+                'error_message': "An issue occurred within the server"
+            }, status=500)
 
-    def vocab_from_english(vocab):
+
+    def vocab_from_japanese(self, request, vocab, daily_search_metadata):
+        '''
+        Uses the provided Japanese Vocab, and returns a response in HTML.
+
+        Parameters:
+        ----------
+        vocab : The vocab in question
+
+        Returns:
+        ----------
+        An HTTP/HTML response
+        '''
+        try:
+            vocab_list = Vocab.objects.filter(japanese_word__contains=vocab)
+            if len(vocab_list) < 1:
+                vocab_list = Vocab.objects.filter(kana__contains=vocab)
+                if len(vocab_list) < 1:
+                    return render(request, 'ui/vocab_results.html', {
+                        'error_message': "No Vocab could be found via the Japanese term provided.",
+                        'daily_search_metadata': daily_search_metadata
+                    }, status=404)
+                else:
+                    return render(request, 'ui/vocab_results.html', {
+                        "vocab_list": vocab_list,
+                        'daily_search_metadata': daily_search_metadata
+                    }, status=200)
+            else:
+                return render(request, 'ui/vocab_results.html', {
+                    "vocab_list": vocab_list,
+                    'daily_search_metadata': daily_search_metadata
+                }, status=200)
+        except:
+            return render(request, 'ui/server_error.html', {
+                'error_message': "An issue occurred within the server"
+            }, status=500)
+
+
+    def vocab_from_english(self, request, vocab, daily_search_metadata):
         '''
         Ues the provided English Vocab, and returns a response in HTML.
 
@@ -120,44 +174,13 @@ class VocabResultsPageView(generic.ListView):
             vocab_list = Vocab.objects.filter(english_word__startswith=vocab)
             if len(vocab_list) < 1:
                 return render(request, 'ui/vocab_results.html', {
-                    'error_message': "No Vocab could be found via the English term provided."
+                    'error_message': "No Vocab could be found via the English term provided.",
+                    'daily_search_metadata': daily_search_metadata
                 }, status=404)
             else:
                 return render(request, 'ui/vocab_results.html', {
-                    "vocab_list": vocab_list
-                }, status=200)
-        except:
-            return render(request, 'ui/server_error.html', {
-                'error_message': "An issue occurred within the server"
-            }, status=500)
-
-    def vocab_from_japanese(vocab):
-        '''
-        Uses the provided Japanese Vocab, and returns a response in HTML.
-
-        Parameters:
-        ----------
-        vocab : The vocab in question
-
-        Returns:
-        ----------
-        An HTTP/HTML response
-        '''
-        try:
-            vocab_list = Vocab.objects.filter(japanese_word__contains=vocab)
-            if len(vocab_list) < 1:
-                vocab_list = Vocab.objects.filter(japanese_word__contains=vocab)
-                if len(vocab_list) < 1:
-                    return render(request, 'ui/vocab_results.html', {
-                        'error_message': "No Vocab could be found via the Japanese term provided."
-                    }, status=404)
-                else:
-                    return render(request, 'ui/vocab_results.html', {
-                        "vocab_list": vocab_list
-                    }, status=200)
-            else:
-                return render(request, 'ui/vocab_results.html', {
-                    "vocab_list": vocab_list
+                    "vocab_list": vocab_list,
+                    "daily_search_metadata": daily_search_metadata
                 }, status=200)
         except:
             return render(request, 'ui/server_error.html', {

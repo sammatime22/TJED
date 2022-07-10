@@ -1,14 +1,20 @@
 <h2>TJED</h2>
+{% if error_message is not None %}
+   <h5>{{ error_message }}</h5> 
+{% else %}
+    <ul>
+        {% for vocab_item in vocab_list %}
+            {% if vocab_item.japanese_word != "" %}
+                <li>Japanese Word: {{ vocab_item.japanese_word }}</li>
+                <li>Kana (reading): {{ vocab_item.kana }} </li>
+                <li>English Word: {{ vocab_item.english_word }}</li>
+            {% else %}
+                <li>Kana (reading): {{ vocab_item.kana }} </li>
+                <li>English Word: {{ vocab_item.english_word }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
 
-<ul>
-    {% for vocab_item in vocab %}
-        {% if vocab_item.japanese_word != "" %}
-            <li>Japanese Word: {{ vocab_item.japanese_word }}</li>
-            <li>Kana (reading): {{ vocab_item.kana }} </li>
-            <li>English Word: {{ vocab_item.english_word }}</li>
-        {% else %}
-            <li>Kana (reading): {{ vocab_item.kana }} </li>
-            <li>English Word: {{ vocab_item.english_word }}</li>
-        {% endif %}
-    {% endfor %}
-</ul>
+<h3>Today's Search Metrics</h3>
+<h2>Number of Searches: {{ daily_search_metadata.number_of_searches }}</h2>
