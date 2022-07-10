@@ -11,13 +11,14 @@
 
     function goto() {
         console.log(document.getElementById("searchbar").value);
+        console.log()
         if (document.getElementById("searchtype_kanji").checked) {
-            window.location.replace({% url 'UI.kanji' %} + document.getElementById("searchbar").value);
+            window.location = window.location.toString().split("ui")[0] + "ui/kanji/"+ document.getElementById("searchbar").value;
         } else {
             if (document.getElementById("language_jpn").checked) {
-                window.location.replace({% url 'vocab_from_japanese' %} + document.getElementById("searchbar").value);
+                window.location = window.location.toString().split("ui")[0] + "ui/vocab/japanese/" + document.getElementById("searchbar").value;
             } else {
-                window.location.replace({% url 'vocab_from_english' %} +  document.getElementById("searchbar").value);
+                window.location = window.location.toString().split("ui")[0] + "ui/vocab/english/" + document.getElementById("searchbar").value;
             }
         }
     }
