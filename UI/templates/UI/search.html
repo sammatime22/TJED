@@ -1,3 +1,7 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href={% static 'UI/style.css' %}>
+
 <script>
     function searchTypeChanged() {
         if (document.getElementById("searchtype_kanji").checked) {
@@ -26,9 +30,13 @@
 
 <h2>TJED</h2>
 
-<input id="searchbar" type="text" placeholder="search / 検索">
-<button type="submit" onclick="goto()">
-    <i class="fa fa-search">&#128269;</i>
-</button>
-<input type="radio" onchange="searchTypeChanged()" name="searchtype" value="kanji" id="searchtype_kanji"><label>Kanji</label><input type="radio" onchange="searchTypeChanged()" name="searchtype" value="vocab" checked><label>Vocab</label>
-<input type="radio" name="language" value="japanese" id="language_jpn" checked><label>Japanese</label><input type="radio" name="language" id="language_eng" value="english"><label>English</label>
+<div class="search-bar" >
+    <input id="searchbar" type="text" placeholder="search / 検索">
+    <button type="submit" onclick="goto()">
+        <i class="fa fa-search">&#128269;</i>
+    </button>
+</div>
+<div>
+    <input type="radio" onchange="searchTypeChanged()" name="searchtype" value="kanji" id="searchtype_kanji"><label>Kanji</label><input type="radio" onchange="searchTypeChanged()" name="searchtype" value="vocab" checked><label>Vocab</label>
+    <input type="radio" name="language" value="japanese" id="language_jpn" checked><label>Japanese</label><input type="radio" name="language" id="language_eng" value="english"><label>English</label>
+</div>
