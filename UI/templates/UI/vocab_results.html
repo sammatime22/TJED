@@ -1,11 +1,14 @@
 {% load static %}
 
+<link rel="stylesheet" type="text/css" href={% static 'UI/bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css' %}>
+
 {% include "UI/search.html" %}
 
 {% if error_message is not None %}
    <h5>{{ error_message }}</h5> 
 {% else %}
-    <ul>
+<div class="container">
+    <ul class="container">
         {% for vocab_item in vocab_list %}
             {% if vocab_item.japanese_word != "" %}
                 <li>Japanese Word: {{ vocab_item.japanese_word }}</li>
@@ -17,6 +20,7 @@
             {% endif %}
         {% endfor %}
     </ul>
+</div>
 {% endif %}
 
 <h3>Today's Search Metrics</h3>
