@@ -45,14 +45,13 @@ class KanjiViewTests(TestCase):
 
 
     # Test 500 response returned if server error
-    @patch('builtins.len')
-    def test_kanji_search_returns_500(self, mock_corrupt_len):
-        mock_corrupt_len.side_effect = Exception
-        mock_request_argument = None
-        response = get_kanji(mock_request_argument, '日')
+    @patch('API.models.Kanji.objects.filter')
+    def test_kanji_search_returns_500(self, mock_corrupt_filter):
+        mock_corrupt_filter.side_effect = Exception
+        response = self.client.get(reverse('api:kanji', args=('日')))
         assert response.status_code == 500
         assert response.content == b'{}'
-            
+
 
 class VocabFromJapaneseViewTests(TestCase):
     # Test 200 response given a word
@@ -89,8 +88,7 @@ class VocabFromJapaneseViewTests(TestCase):
     @patch('API.models.Vocab.objects.filter')
     def test_vocab_search_using_japanese_returns_500(self, mock_corrupt_filter):
         mock_corrupt_filter.side_effect = Exception
-        mock_request_argument = None
-        response = get_vocab_using_japanese(mock_request_argument, '日')
+        response = self.client.get(reverse('api:vocab_from_japanese', args=('日',)))
         assert response.status_code == 500
         assert response.content == b'{}'
 
@@ -119,7 +117,6 @@ class VocabFromEnglishViewTests(TestCase):
     @patch('API.models.Vocab.objects.filter')
     def test_vocab_search_using_english_returns_500(self, mock_corrupt_filter):
         mock_corrupt_filter.side_effect = Exception
-        mock_request_argument = None
-        response = get_vocab_using_english(mock_request_argument, 'Sun')
+        response = self.client.get(reverse('api:vocab_from_english', args=('Sun',)))
         assert response.status_code == 500
         assert response.content == b'{}'

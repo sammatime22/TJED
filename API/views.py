@@ -30,7 +30,7 @@ def get_kanji(request, kanji_character):
             result_quantity = len(kanji)
             if result_quantity == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 return HttpResponse(kanji)
-            elif result_quantity < EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY :
+            elif result_quantity < EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 return HttpResponseNotFound(EMPTY_RESPONSE)
             else:
                 raise Exception("More than one entry found for same Kanji, " + kanji_character)
