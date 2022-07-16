@@ -25,12 +25,12 @@ class KanjiResultsPageViewTests(TestCase):
         response = self.client.get(reverse('ui:kanji', args=('日',)))
         assert response.status_code == 200
         decoded_content = response.content.decode('utf-8')
-        assert decoded_content.find("<li>Kanji: 日</li>") > -1
-        assert decoded_content.find("<li>On-Yomi: ニチ、ジツ</li>") > -1
-        assert decoded_content.find("<li>Kun-Yomi: ひ、ーぴ、ーか </li>") > -1
-        assert decoded_content.find("<li>Meaning: day, Sun </li>") > -1
+        assert decoded_content.find("<h1>日</h1>") > -1
+        assert decoded_content.find("<b>On-Yomi:</b> ニチ、ジツ</br>") > -1
+        assert decoded_content.find("<b>Kun-Yomi:</b> ひ、ーぴ、ーか</br>") > -1
+        assert decoded_content.find("<b>Meaning:</b> day, Sun") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # The status code is 404 and no Kanji info is returned, described in the message
@@ -40,7 +40,7 @@ class KanjiResultsPageViewTests(TestCase):
         decoded_content = response.content.decode('utf-8')
         assert decoded_content.find("<h5>No Kanji could be found via this search.</h5>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # The status code is 400, and no Kanji info is returned, described in the message
@@ -50,7 +50,7 @@ class KanjiResultsPageViewTests(TestCase):
         decoded_content = response.content.decode('utf-8')
         assert decoded_content.find("<h5>The query parameters provided were not of an appropriate length.</h5>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # The status code is 500, and explicitly states an Internal Server Error occurred
@@ -73,11 +73,11 @@ class VocabResultsPageViewTests(TestCase):
         response = self.client.get(reverse('ui:vocab_from_japanese', args=("日",)))
         assert response.status_code == 200
         decoded_content = response.content.decode('utf-8')
-        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
-        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
-        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h1><b>日</b></h1>") > -1
+        assert decoded_content.find("<b>Kana (reading):</b> にち </br>") > -1
+        assert decoded_content.find("<b>English Word:</b> Sun</p></br>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # Kana search 200
@@ -86,11 +86,11 @@ class VocabResultsPageViewTests(TestCase):
         response = self.client.get(reverse('ui:vocab_from_japanese', args=("にち",)))
         assert response.status_code == 200
         decoded_content = response.content.decode('utf-8')
-        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
-        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
-        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h1><b>日</b></h1>") > -1
+        assert decoded_content.find("<b>Kana (reading):</b> にち </br>") > -1
+        assert decoded_content.find("<b>English Word:</b> Sun</p></br>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # Test that a we try the Japanese search but do not get anything back and status code 404
@@ -100,7 +100,7 @@ class VocabResultsPageViewTests(TestCase):
         decoded_content = response.content.decode('utf-8')
         assert decoded_content.find("<h5>No Vocab could be found via the Japanese term provided.</h5>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # Test Japanese Vocab 500
@@ -119,11 +119,11 @@ class VocabResultsPageViewTests(TestCase):
         response = self.client.get(reverse('ui:vocab_from_english', args=("Sun",)))
         assert response.status_code == 200
         decoded_content = response.content.decode('utf-8')
-        assert decoded_content.find("<li>Japanese Word: 日</li>") > -1
-        assert decoded_content.find("<li>Kana (reading): にち </li>") > -1
-        assert decoded_content.find("<li>English Word: Sun</li>") > -1
+        assert decoded_content.find("<h1><b>日</b></h1>") > -1
+        assert decoded_content.find("<b>Kana (reading):</b> にち </br>") > -1
+        assert decoded_content.find("<b>English Word:</b> Sun</p></br>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
     
 
     # Test that a we try the English search but do not get anything back and status code 404
@@ -133,7 +133,7 @@ class VocabResultsPageViewTests(TestCase):
         decoded_content = response.content.decode('utf-8')
         assert decoded_content.find("<h5>No Vocab could be found via the English term provided.</h5>") > -1
         assert decoded_content.find("<h3>Today's Search Metrics</h3>") > -1
-        assert decoded_content.find("<h2>Number of Searches: 1</h2>") > -1
+        assert decoded_content.find("<p>Number of Searches: 1</p>") > -1
 
 
     # Test English Vocab 500

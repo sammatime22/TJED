@@ -4,16 +4,18 @@
     function searchTypeChanged() {
         if (document.getElementById("searchtype_kanji").checked) {
             document.getElementById("language_jpn").disabled = true;
+            document.getElementById("language_jpn_label").disabled = true;
             document.getElementById("language_eng").disabled = true;
+            document.getElementById("language_eng_label").disabled = true;
         } else {
-            document.getElementById("language_jpn").disabled = false;            
+            document.getElementById("language_jpn").disabled = false;
+            document.getElementById("language_jpn_label").disabled = false;
             document.getElementById("language_eng").disabled = false;
+            document.getElementById("language_eng_label").disabled = false;
         }
     }
 
     function goto() {
-        console.log(document.getElementById("searchbar").value);
-        console.log()
         if (document.getElementById("searchtype_kanji").checked) {
             window.location = window.location.toString().split("ui")[0] + "ui/kanji/"+ document.getElementById("searchbar").value;
         } else {
@@ -27,24 +29,40 @@
 </script>
 
 <div class="container">
-    <h2>TJED🇯🇵🇺🇸📕</h2>
+    <h2 class="text-center">TJED🇯🇵🇬🇧📕</h2>
 </div>
 
 <div class="container">
-    <div class="search-bar " >
-        <input id="searchbar" type="text" placeholder="search / 検索">
-        <button type="submit" onclick="goto()">
-            <i class="fa fa-search">&#128269;</i>
+    <div class="container input-group">
+        <input id="searchbar" type="text" placeholder="search / 検索" class="form-control">
+        <button type="button" onclick="goto()" class="btn btn-primary">
+            <i class="bi bi-search">
+                <svg height="16" width="16" fill="white">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+            </i>
         </button>
     </div>
 </div>
 <div class="container">
-    <div class="container">
-        <input type="radio" onchange="searchTypeChanged()" name="searchtype" value="kanji" id="searchtype_kanji"><label>Kanji</label>
-        <input type="radio" onchange="searchTypeChanged()" name="searchtype" value="vocab" checked><label>Vocab</label>
-    </div>
-    <div class="container">
-        <input type="radio" name="language" value="japanese" id="language_jpn" checked><label>Japanese</label>
-        <input type="radio" name="language" id="language_eng" value="english"><label>English</label>
+    <div class="row align-items-center">
+        <div class="row align-items-center">
+            <div class="container btn-group p-2 col-8">
+                <input type="radio" class="btn-check" onchange="searchTypeChanged()" name="searchtype" id="searchtype_kanji" autocomplete="off"/>
+                <label class="btn btn-outline-secondary" id="searchtype_kanji_label" for="searchtype_kanji">Kanji</label>
+
+                <input type="radio" class="btn-check" onchange="searchTypeChanged()" name="searchtype" id="searchtype_vocab" autocomplete="off" checked/>
+                <label class="btn btn-outline-secondary" for="searchtype_vocab">Vocab</label>        
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="container btn-group p-2 col-8">
+                <input class="btn-check" type="radio" name="language" value="japanese" id="language_jpn" checked>
+                <label class="btn btn-outline-secondary" name="language_label" id="language_jpn_label" for="language_jpn">Japanese</label>
+
+                <input class="btn-check" type="radio" name="language" id="language_eng" value="english">
+                <label class="btn btn-outline-secondary" name="language_label" id="language_eng_label" for="language_eng">English</label>
+            </div>
+        </div>
     </div>
 </div>

@@ -65,7 +65,7 @@ class KanjiResultsPageView(generic.ListView):
                 }, status=404)
             else:
                 return render(request, 'ui/kanji_results.html', {
-                    'kanji_list': kanji,
+                    'kanji_item': kanji.first(),
                     'daily_search_metadata': daily_search_metadata
                 }, status=200)
         except:

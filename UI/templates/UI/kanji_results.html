@@ -1,22 +1,23 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href={% static 'UI/bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css' %}>
 
-{% include "UI/search.html" %}
+<div class="row align-items-center">
+    {% include "UI/search.html" %}
+</div>
 
 {% if error_message is not None %}
    <h5>{{ error_message }}</h5> 
 {% else %}
 <div class="container">
-    <ul class="container">
-        {% for kanji_item in kanji_list %}
-            <li>Kanji: {{ kanji_item.kanji_character }}</li>
-            <li>On-Yomi: {{ kanji_item.on_yomi }}</li>
-            <li>Kun-Yomi: {{ kanji_item.kun_yomi }} </li>
-            <li>Meaning: {{ kanji_item.meaning }} </li>
-        {% endfor %}
-    </ul>
+    <h1>{{ kanji_item.kanji_character }}</h1>
+    <p>
+        {% if kanji_item.on_yomi != "" %}<b>On-Yomi:</b> {{ kanji_item.on_yomi }}</br>{% endif %}
+        {% if kanji_item.kun_yomi != "" %}<b>Kun-Yomi:</b> {{ kanji_item.kun_yomi }}</br>{% endif %}
+        <b>Meaning:</b> {{ kanji_item.meaning }} 
+    </p>
 </div>
 {% endif %}
-
-<h3>Today's Search Metrics</h3>
-<h2>Number of Searches: {{ daily_search_metadata.number_of_searches }}</h2>
+<div class="container p-5">
+    <h3>Today's Search Metrics</h3>
+    <p>Number of Searches: {{ daily_search_metadata.number_of_searches }}</p>
+</div>
