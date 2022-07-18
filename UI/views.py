@@ -11,16 +11,16 @@ class SearchPageView(generic.DetailView):
     '''
     The main page for the TJED UI.
     '''
-    template_name = 'ui/index.html'
+    template_name = 'UI/index.html'
 
     def get(self, request):
-        return render(request, 'ui/index.html', {})
+        return render(request, 'UI/index.html', {})
 
 class KanjiResultsPageView(generic.ListView):
     '''
     The view handling Kanji search results.
     '''
-    template_name = 'ui/kanji_results.html'
+    template_name = 'UI/kanji_results.html'
     model = Kanji
 
     def get(self, request, kanji_character):
@@ -51,7 +51,7 @@ class KanjiResultsPageView(generic.ListView):
 
             # Return a "BAD REQUEST" given the Kanji query length is greater than 1
             if len(kanji_character) != EXPECTED_KANJI_QUERY_LENGTH:
-                return render(request, 'ui/kanji_results.html', {
+                return render(request, 'UI/kanji_results.html', {
                     'error_message': "The query parameters provided were not of an appropriate length.",
                     'daily_search_metadata': daily_search_metadata
                 }, status=400)
@@ -59,17 +59,17 @@ class KanjiResultsPageView(generic.ListView):
             # Return and render the kanji search results
             kanji = Kanji.objects.filter(kanji_character__exact=kanji_character)
             if len(kanji) < EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
-                return render(request, 'ui/kanji_results.html', {
+                return render(request, 'UI/kanji_results.html', {
                     'error_message': "No Kanji could be found via this search.",
                     'daily_search_metadata': daily_search_metadata
                 }, status=404)
             else:
-                return render(request, 'ui/kanji_results.html', {
+                return render(request, 'UI/kanji_results.html', {
                     'kanji_item': kanji.first(),
                     'daily_search_metadata': daily_search_metadata
                 }, status=200)
         except:
-            return render(request, 'ui/server_error.html', {
+            return render(request, 'UI/server_error.html', {
                 'error_message': "An issue occurred within the server"
             }, status=500)
 
@@ -78,7 +78,7 @@ class VocabResultsPageView(generic.ListView):
     '''
     The view handling Vocab search results.
     '''
-    template_name = 'ui/vocab_results.html'
+    template_name = 'UI/vocab_results.html'
     model = Vocab
 
     LANGUAGE_LOOKUP_SECTION = 3 # First entry in split list is ''
@@ -118,7 +118,7 @@ class VocabResultsPageView(generic.ListView):
             else: # default to English search (for now)
                 return self.vocab_from_english(request, vocab, daily_search_metadata)
         except:
-            return render(request, 'ui/server_error.html', {
+            return render(request, 'UI/server_error.html', {
                 'error_message': "An issue occurred within the server"
             }, status=500)
 
@@ -140,22 +140,22 @@ class VocabResultsPageView(generic.ListView):
             if len(vocab_list) < 1:
                 vocab_list = Vocab.objects.filter(kana__contains=vocab)
                 if len(vocab_list) < 1:
-                    return render(request, 'ui/vocab_results.html', {
+                    return render(request, 'UI/vocab_results.html', {
                         'error_message': "No Vocab could be found via the Japanese term provided.",
                         'daily_search_metadata': daily_search_metadata
                     }, status=404)
                 else:
-                    return render(request, 'ui/vocab_results.html', {
+                    return render(request, 'UI/vocab_results.html', {
                         "vocab_list": vocab_list,
                         'daily_search_metadata': daily_search_metadata
                     }, status=200)
             else:
-                return render(request, 'ui/vocab_results.html', {
+                return render(request, 'UI/vocab_results.html', {
                     "vocab_list": vocab_list,
                     'daily_search_metadata': daily_search_metadata
                 }, status=200)
         except:
-            return render(request, 'ui/server_error.html', {
+            return render(request, 'UI/server_error.html', {
                 'error_message': "An issue occurred within the server"
             }, status=500)
 
@@ -175,16 +175,16 @@ class VocabResultsPageView(generic.ListView):
         try:
             vocab_list = Vocab.objects.filter(english_word__startswith=vocab)
             if len(vocab_list) < 1:
-                return render(request, 'ui/vocab_results.html', {
+                return render(request, 'UI/vocab_results.html', {
                     'error_message': "No Vocab could be found via the English term provided.",
                     'daily_search_metadata': daily_search_metadata
                 }, status=404)
             else:
-                return render(request, 'ui/vocab_results.html', {
+                return render(request, 'UI/vocab_results.html', {
                     "vocab_list": vocab_list,
                     "daily_search_metadata": daily_search_metadata
                 }, status=200)
         except:
-            return render(request, 'ui/server_error.html', {
+            return render(request, 'UI/server_error.html', {
                 'error_message': "An issue occurred within the server"
             }, status=500)
