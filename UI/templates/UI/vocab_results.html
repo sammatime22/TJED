@@ -1,27 +1,30 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href={% static 'UI/bootstrap-5.2.0-beta1-dist/css/bootstrap.min.css' %}>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<div class="row align-items-center">
-    {% include "UI/search.html" %}
-</div>
-
-{% if error_message is not None %}
-   <h5>{{ error_message }}</h5> 
-{% else %}
 <div class="container">
-    {% for vocab_term in vocab_list %}
-        {% if vocab_term.japanese_word != "" %}
-            <h1><b>{{ vocab_term.japanese_word }}</b></h1>
-            <p><b>Kana (reading):</b> {{ vocab_term.kana }} </br>
-        {% else %}
-            <h1><b>{{ vocab_term.kana }}</b></h1><p>
-        {% endif %}
-        <b>English Word:</b> {{ vocab_term.english_word }}</p></br>
-        </br>
-    {% endfor %}
-</div>
-{% endif %}
+    <div class="row align-items-center">
+        {% include "UI/search.html" %}
+    </div>
 
-<h3>Today's Search Metrics</h3>
-<p>Number of Searches: {{ daily_search_metadata.number_of_searches }}</p>
+    {% if error_message is not None %}
+    <h5>{{ error_message }}</h5> 
+    {% else %}
+    <div class="container">
+        {% for vocab_term in vocab_list %}
+            {% if vocab_term.japanese_word != "" %}
+                <h1><b>{{ vocab_term.japanese_word }}</b></h1>
+                <p><b>Kana (reading):</b> {{ vocab_term.kana }} </br>
+            {% else %}
+                <h1><b>{{ vocab_term.kana }}</b></h1><p>
+            {% endif %}
+            <b>English Word:</b> {{ vocab_term.english_word }}</p></br>
+            </br>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h3>Today's Search Metrics</h3>
+    <p>Number of Searches: {{ daily_search_metadata.number_of_searches }}</p>
+</div>
