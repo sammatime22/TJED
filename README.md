@@ -1,6 +1,6 @@
 A Tiny Japanese English Dictionary (TJED) API and Webapp utilizing Django.
 
-
+(Note - as of 12/28/2020, there is a temporary outage, will update these links (maybe move from heroku) at a later time)
 Access UI at: https://tjedictionary.herokuapp.com/ui
 
 Access API at: https://tjedictionary.herokuapp.com/api
