@@ -1,0 +1,7 @@
+<ul>
+  <li *ngFor="let item of result">
+    <p *ngFor="let subitem of item | keyvalue">
+      {{ subitem.key }} : {{ subitem.value }}
+    </p>
+  </li>
+</ul>

@@ -1,0 +1,8 @@
+.vertical-divider {
+  border-left: 2px solid gray;
+  height: 100vh;
+}
+
+.logo-fit {
+  width: 100%;
+}

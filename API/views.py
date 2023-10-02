@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadReque
 from django.shortcuts import render
 from django.views import generic
 
+import json
+
 # Constants associated with the Views of the API
 EXPECTED_KANJI_QUERY_LENGTH = 1
 EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY = 1
@@ -29,7 +31,7 @@ def get_kanji(request, kanji_character):
             kanji = Kanji.objects.filter(kanji_character__exact=kanji_character)
             result_quantity = len(kanji)
             if result_quantity == EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
-                return HttpResponse(kanji)
+                return HttpResponse(handle_array_as_json(kanji))
             elif result_quantity < EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 return HttpResponseNotFound(EMPTY_RESPONSE)
             else:
@@ -58,12 +60,12 @@ def get_vocab_using_japanese(request, japanese_word_query):
         vocab = Vocab.objects.filter(japanese_word__contains=japanese_word_query)
         if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
             number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
-            return HttpResponse(vocab[0:number_of_results_to_return])
+            return HttpResponse(handle_array_as_json(vocab[0:number_of_results_to_return]))
         else:
             vocab = Vocab.objects.filter(kana__contains=japanese_word_query)
             if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
                 number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
-                return HttpResponse(vocab[0:number_of_results_to_return])
+                return HttpResponse(handle_array_as_json(vocab[0:number_of_results_to_return]))
             else:
                 return HttpResponseNotFound(EMPTY_RESPONSE)
     except:
@@ -88,8 +90,27 @@ def get_vocab_using_english(request, english_word_query):
         vocab = Vocab.objects.filter(english_word__startswith=english_word_query)
         if len(vocab) >= EXPECTED_NUMBER_OF_RESULTS_FROM_QUERY:
             number_of_results_to_return = MAX_RESULTS_TO_RETUFN if len(vocab) > MAX_RESULTS_TO_RETUFN else len(vocab)
-            return HttpResponse(vocab[0:number_of_results_to_return])
+            return HttpResponse(handle_array_as_json(vocab[0:number_of_results_to_return]))
         else:
             return HttpResponseNotFound(EMPTY_RESPONSE)
     except:
         return HttpResponseServerError(EMPTY_RESPONSE)
+
+
+def handle_array_as_json(terms_array):
+    '''
+    A helper method, which allows for an array of objects to be properly converted to JSON.
+    
+    Parameters:
+    ----------
+    terms_array : The terms in an array format
+
+    Return:
+    ----------
+    A JSON array (as a string) of all of the terms, properly formatted
+    '''
+    formatted_terms_string = str(terms_array[0])
+    if len(terms_array) > 1:
+        for term in terms_array[1:len(terms_array)]:
+            formatted_terms_string = formatted_terms_string + "," + str(term)
+    return "[" + formatted_terms_string + "]"

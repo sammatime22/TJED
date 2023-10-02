@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-4">
+    <app-search (searchTermEvent)="search($event)"></app-search>
+  </div>
+  <div class="col-8">
+    <app-results [result]="searchResults"></app-results>
+  </div>
+</div>
