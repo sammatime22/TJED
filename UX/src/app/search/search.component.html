@@ -7,17 +7,17 @@
     <div class="row">
       <p>Welcome to the Tiny Japanese-English Dictionary (TJED)!</p>
       <br>
-      <p>The search box is below - note that previously searched term are listed below.</p>
+      <p>The search box is below - note that previously searched term are listed below the search box. Press enter in the search box to get results back!</p>
     </div>
 
     <div class="row">
-      <input id="searchbar" placeholder="search/検索" type="text" [(ngModel)]="searchTerm" name="searchTerm"/>
-      <input id="searchbutton" type="submit" (click)="search()" class="glyphicon glyphicon-search" value=""/>
+      <input class="searchbar" id="searchbar" placeholder="search/検索" type="text" [(ngModel)]="searchTerm" name="searchTerm" (keyup.enter)="search()"/>
     </div>
 
     <div class="row">
+      <p class="last-five-searches">Last Five Searches:</p>
       <ul>
-        <li *ngFor="let searchedTerm of searchedTerms;">
+        <li *ngFor="let searchedTerm of searchedTerms.reverse()">
           {{searchedTerm}}
         </li>
       </ul>

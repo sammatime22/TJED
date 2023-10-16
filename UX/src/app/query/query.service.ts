@@ -7,22 +7,33 @@ import { firstValueFrom } from 'rxjs';
 })
 export class QueryService {
 
-  readonly TJED_API_URL: string = "http://127.0.0.1:8000"
+  readonly TJED_API_URL: string = "http://127.0.0.1:8000"; // TODO
 
   constructor(private http: HttpClient) { }
 
-  async queryTJEDAPI(searchTerm: string): Promise<string> {
+  /**
+   * Queries the TJED API at the appropriate endpoint for the search term provided
+   * 
+   * @param searchTerm The term to be searched
+   * @returns an array of objects returned from the search
+   */
+  async queryTJEDAPI(searchTerm: string) {
     var testUrl = this.TJED_API_URL;
 
     if ((/^[a-zA-Z]+$/).test(searchTerm)) {
       testUrl += "/api/vocab/english/" + searchTerm + "/";
     } else if (searchTerm.length > 1) {
       testUrl += "/api/vocab/japanese/" + searchTerm + "/";
-    } else {
+    } else if (searchTerm.length == 1) {
       testUrl += "/api/kanji/" + searchTerm + "/";
+    } else {
+      return [];
     }
-
-    const vals = await firstValueFrom(this.http.get<string>(testUrl));
-    return vals;
+    try {
+      return await firstValueFrom(this.http.get<object[]>(testUrl));
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
 }

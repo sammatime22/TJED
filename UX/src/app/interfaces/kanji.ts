@@ -1,6 +1,6 @@
 export interface Kanji {
-  kanjiCharacter: string;
+  kanji_character: string;
   meaning: string;
-  onYomi: string;
-  kunYomi: string;
+  on_yomi: string;
+  kun_yomi: string;
 }

@@ -1,5 +1,5 @@
 export interface Vocab {
-  japaneseWord: string;
-  englishWord: string;
+  japanese_word: string;
+  english_word: string;
   kana?: string;
 }

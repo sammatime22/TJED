@@ -6,3 +6,13 @@
 .logo-fit {
   width: 100%;
 }
+
+.searchbar {
+  margin-left: 5px;
+}
+
+.last-five-searches {
+  text-shadow: 0 0 black;
+  text-decoration: underline;
+  margin-bottom: 0px;
+}

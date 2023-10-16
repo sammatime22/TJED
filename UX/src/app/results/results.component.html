@@ -1,7 +1,8 @@
-<ul>
-  <li *ngFor="let item of result">
+<ul class="result-listing" *ngIf="result.length > 0 && searchTerm != ''">
+  <li *ngFor="let item of result" class="result-listing">
     <p *ngFor="let subitem of item | keyvalue">
-      {{ subitem.key }} : {{ subitem.value }}
+      {{ subitem.key.replace("_", " ") }}: {{ subitem.value }}
     </p>
   </li>
 </ul>
+<p *ngIf="result.length == 0 && searchTerm != ''">No results found for {{ searchTerm }}</p>

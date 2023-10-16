@@ -14,7 +14,7 @@ export class SearchComponent implements OnInit {
 
   searchedTerms: string[] = [];
 
-  searchTerm:string = "";
+  searchTerm: string =  "";
 
   @Output() searchTermEvent = new EventEmitter<string>();
 
@@ -25,12 +25,14 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Keeps track of the last five searches and emits the search term in an event.
+   */
   search() {
     this.searchedTerms.push(this.searchTerm);
     if (this.searchedTerms.length > this.MAX_SEARCHED_TERMS_DISPLAYED) {
       this.searchedTerms.splice(0, 1);
     }
-    console.log(this.searchedTerms);
     this.searchTermEvent.emit(this.searchTerm);
   }
 }

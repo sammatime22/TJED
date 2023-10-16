@@ -8,7 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ResultsComponent implements OnInit {
 
   @Input()
-  result: string = "";
+  result: object[] = [];
+
+  @Input()
+  searchTerm: string = "";
 
   constructor() { }
 
