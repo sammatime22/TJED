@@ -32,4 +32,6 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain('UX app is running!');
   });
+
+  // it should utilize the query service when a search event is emitted
 });

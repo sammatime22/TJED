@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Kanji } from 'src/app/interfaces/kanji';
+import { Vocab } from 'src/app/interfaces/vocab';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,11 @@ export class QueryService {
       return [];
     }
     try {
-      return await firstValueFrom(this.http.get<object[]>(testUrl));
+      if (testUrl.indexOf("kanji") != -1) {
+        return await firstValueFrom(this.http.get<Kanji[]>(testUrl));
+      } else {
+        return await firstValueFrom(this.http.get<Vocab[]>(testUrl));
+      }
     } catch (e) {
       console.error(e);
       return [];
