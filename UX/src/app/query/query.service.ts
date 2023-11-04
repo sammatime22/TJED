@@ -24,10 +24,12 @@ export class QueryService {
 
     if ((/^[a-zA-Z]+$/).test(searchTerm)) {
       testUrl += "/api/vocab/english/" + searchTerm + "/";
-    } else if (searchTerm.length > 1) {
-      testUrl += "/api/vocab/japanese/" + searchTerm + "/";
-    } else if (searchTerm.length == 1) {
-      testUrl += "/api/kanji/" + searchTerm + "/";
+    } else if ((/^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]+$/).test(searchTerm)) {
+      if (searchTerm.length > 1) {
+        testUrl += "/api/vocab/japanese/" + searchTerm + "/";
+      } else {
+        testUrl += "/api/kanji/" + searchTerm + "/";
+      }
     } else {
       return [];
     }

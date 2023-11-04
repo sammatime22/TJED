@@ -23,5 +23,15 @@ describe('SearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it should emit an event when search is applied
+  it('#search() should emit an event when #keyup.enter is registered', () => {
+    component.searchTerm = "寿司";
+    const emitSpy = spyOn(component.searchTermEvent, 'emit');
+
+    const input = fixture.nativeElement.querySelector('input');
+    input.click();
+    input.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+
+    expect(emitSpy).toHaveBeenCalledWith("寿司");
+    expect(component.searchedTerms).toEqual(["寿司"]);
+  });
 });
