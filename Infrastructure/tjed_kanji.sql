@@ -2265,6 +2265,7 @@ INSERT INTO API_kanji (kanji_character, on_yomi, kun_yomi, meaning) VALUES ("亜
 ("肌", "キ", "はだ", "texture, skin, body, grain"),
 ("畑", "", "はた, はたけ, -ばたけ", "farm, field, garden, one's specialty, (kokuji)"),
 ("畠", "", "はたけ, はた", "field, farm, garden, (kokuji)"),
+("畑", "", "はたけ, はた", "field, farm, garden, (kokuji)"),
 ("八", "ハチ, ハツ", "や, や.つ, やっ.つ, よう", "eight, eight radical (no. 12)"),
 ("鉢", "ハチ, ハツ", "", "bowl, rice tub, pot, crown"),
 ("溌", "ハツ", "も.る, とびち.る, そそ.ぐ", "sprinkle, lively, vigorous"),

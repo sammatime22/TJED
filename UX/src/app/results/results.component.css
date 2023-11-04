@@ -1,0 +1,12 @@
+ul.result-listing {
+  list-style-type: none;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+li.result-listing {
+  border: thin;
+  border-style: solid;
+  border-radius: 2px;
+  margin: 2px;
+}
