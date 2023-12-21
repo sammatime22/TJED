@@ -25,10 +25,10 @@ class KanjiViewTests(TestCase):
         
         kanji_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
-        assert kanji_response_as_json.get("kanji") == '日'
-        assert kanji_response_as_json.get("meaning") == "day, Sun"
-        assert kanji_response_as_json.get("on_yomi") == "ニチ、ジツ"
-        assert kanji_response_as_json.get("kun_yomi") == "ひ、ーぴ、ーか"
+        assert kanji_response_as_json[0].get("kanji") == '日'
+        assert kanji_response_as_json[0].get("meaning") == "day, Sun"
+        assert kanji_response_as_json[0].get("on_yomi") == "ニチ、ジツ"
+        assert kanji_response_as_json[0].get("kun_yomi") == "ひ、ーぴ、ーか"
         
 
     # Test 404 response and no content returned with no Kanji
@@ -61,9 +61,9 @@ class VocabFromJapaneseViewTests(TestCase):
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
-        assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("kana") == "にち"
-        assert vocab_response_as_json.get("english_word") == "Sun"
+        assert vocab_response_as_json[0].get("japanese_word") == "日"
+        assert vocab_response_as_json[0].get("kana") == "にち"
+        assert vocab_response_as_json[0].get("english_word") == "Sun"
 
 
     # Test 200 response given the kana of the word
@@ -73,9 +73,9 @@ class VocabFromJapaneseViewTests(TestCase):
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
-        assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("kana") == "にち"
-        assert vocab_response_as_json.get("english_word") == "Sun"
+        assert vocab_response_as_json[0].get("japanese_word") == "日"
+        assert vocab_response_as_json[0].get("kana") == "にち"
+        assert vocab_response_as_json[0].get("english_word") == "Sun"
 
     # Test 404 response and no content returned
     def test_vocab_search_using_japanese_returns_404(self):
@@ -101,9 +101,9 @@ class VocabFromEnglishViewTests(TestCase):
 
         vocab_response_as_json = json.loads(response.content.decode('utf-8'))
         assert response.status_code == 200
-        assert vocab_response_as_json.get("japanese_word") == "日"
-        assert vocab_response_as_json.get("kana") == "にち"
-        assert vocab_response_as_json.get("english_word") == "Sun"
+        assert vocab_response_as_json[0].get("japanese_word") == "日"
+        assert vocab_response_as_json[0].get("kana") == "にち"
+        assert vocab_response_as_json[0].get("english_word") == "Sun"
 
 
     # Test 404 response and no content returned
